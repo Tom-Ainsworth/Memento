@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react';
 
 const Header = ({ handleNewGame, wins }) => {
-	useEffect(() => (document.title = `${wins} wins`), [wins]);
+	// Update page title with win count
+	useEffect(() => {
+		document.title = `${wins} wins`;
+	}, [wins]);
+
 	return (
 		<header className="header">
 			<h4>{wins} wins</h4>
