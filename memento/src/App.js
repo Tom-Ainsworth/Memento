@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
+import { useState, useEffect } from 'react';
 import Card from './components/Card';
 import shuffle from './utilities/shuffle';
 
@@ -23,20 +22,21 @@ function App() {
 		setDisabled(false);
 	};
 
+	// Used for selection and match handling
 	useEffect(() => {
 		let pickTimer;
 
 		// Two cards have been clicked
 		if (pickOne && pickTwo) {
-			// Check if the cards are the same
+			// Check if the cards the same
 			if (pickOne.image === pickTwo.image) {
 				setCards((prevCards) => {
 					return prevCards.map((card) => {
-						if (cards.image === pickOne.image) {
+						if (card.image === pickOne.image) {
 							// Update card property to reflect match
 							return { ...card, matched: true };
 						} else {
-							// Else no match:
+							// No match
 							return card;
 						}
 					});
@@ -57,23 +57,39 @@ function App() {
 		};
 	}, [cards, pickOne, pickTwo]);
 
-	return (
-		<div className="grid">
-			{cards.map((card) => {
-				const { image, id, matched } = card;
+	// If player has found all matches, handle accordingly
+	useEffect(() => {
+		// Check for any remaining card matches
+		const checkWin = cards.filter((card) => !card.matched);
 
-				return (
-					<Card
-						key={id}
-						image={image}
-						selected={
-							card === pickOne || card === pickTwo || matched
-						}
-						onClick={() => handleClick(card)}
-					/>
-				);
-			})}
-		</div>
+		// All matches made, handle win/badge counters
+		if (cards.length && checkWin.length < 1) {
+			console.log('You win!');
+			setWins(wins + 1);
+			handleTurn();
+			setCards(shuffle);
+		}
+	}, [cards, wins]);
+
+	return (
+		<>
+			<div className="grid">
+				{cards.map((card) => {
+					const { image, id, matched } = card;
+
+					return (
+						<Card
+							key={id}
+							image={image}
+							selected={
+								card === pickOne || card === pickTwo || matched
+							}
+							onClick={() => handleClick(card)}
+						/>
+					);
+				})}
+			</div>
+		</>
 	);
 }
 
