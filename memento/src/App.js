@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
+import Card from './components/Card';
 import shuffle from './utilities/shuffle';
 
 function App() {
-	const [cards, setCards] = useState([shuffle]); // Cards array from assets
+	const [cards, setCards] = useState(shuffle); // Cards array from assets
 
 	return (
 		<div className="grid">
